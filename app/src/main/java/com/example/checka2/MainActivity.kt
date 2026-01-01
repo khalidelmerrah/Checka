@@ -1,7 +1,7 @@
 package com.example.checka2
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.collectAsState
@@ -22,10 +22,17 @@ import com.example.checka2.ui.screens.LeaderboardScreen
 import com.example.checka2.ui.screens.SettingsScreen
 import com.example.checka2.ui.theme.CheckaTheme
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 
-class MainActivity : ComponentActivity() {
+import com.example.checka2.utils.AnalyticsHelper
+
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        val analyticsHelper = AnalyticsHelper(this)
+        analyticsHelper.logAppOpen()
+
         setContent {
             val context = LocalContext.current
             val themePref = UserPreferences.getTheme(context).collectAsState(initial = "System")
@@ -43,6 +50,16 @@ class MainActivity : ComponentActivity() {
                     composable("home") {
                         HomeScreen(
                             onStartGame = { mode, diff, p1, p2 ->
+                                val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)
+                                scope.launch {
+                                    val isFirst = kotlinx.coroutines.flow.first(UserPreferences.isFirstGame(context))
+                                    if (isFirst) {
+                                        analyticsHelper.logFirstGame()
+                                        UserPreferences.setFirstGamePlayed(context)
+                                    }
+                                    analyticsHelper.logGameStart(mode.name, diff.name)
+                                }
+                                
                                 val route = "game/${mode.name}/${diff.name}/$p1/$p2"
                                 navController.navigate(route)
                             },
@@ -68,14 +85,8 @@ class MainActivity : ComponentActivity() {
                         val mode = try { GameMode.valueOf(modeStr) } catch (e: Exception) { GameMode.PassAndPlay }
                         val diff = try { Difficulty.valueOf(diffStr) } catch (e: Exception) { Difficulty.Easy }
 
-                        // Initialize ViewModel with args? 
-                        // Using viewModel() gets the same instance scoped to owner. 
-                        // StartGame needs to be called.
                         val viewModel: com.example.checka2.ui.GameViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
                         
-                        // We should ensure we only start game once per navigation
-                        // Or check if state is unset. 
-                        // For MVP: LaunchedEffect
                         androidx.compose.runtime.LaunchedEffect(Unit) {
                             viewModel.startGame(mode, diff, p1, p2)
                         }
@@ -92,7 +103,11 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("settings") {
-                        SettingsScreen(onBack = { navController.popBackStack() })
+                        SettingsScreen(
+                            onBack = { navController.popBackStack() },
+                            onThemeChanged = { theme -> analyticsHelper.logThemeChanged(theme) },
+                            onLanguageChanged = { lang -> analyticsHelper.setUserLanguage(lang) }
+                        )
                     }
                 }
             }

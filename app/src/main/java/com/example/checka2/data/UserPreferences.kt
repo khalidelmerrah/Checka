@@ -26,6 +26,7 @@ object UserPreferences {
         }
     }
     private val TUTORIAL_SEEN_KEY = booleanPreferencesKey("tutorial_seen")
+    private val FIRST_GAME_KEY = booleanPreferencesKey("first_game_started")
 
     suspend fun setTutorialSeen(context: Context, seen: Boolean) {
         context.dataStore.edit { prefs ->
@@ -36,6 +37,25 @@ object UserPreferences {
     fun getTutorialSeen(context: Context): Flow<Boolean> {
         return context.dataStore.data.map { prefs ->
             prefs[TUTORIAL_SEEN_KEY] ?: false
+        }
+    }
+
+    suspend fun setFirstGamePlayed(context: Context) {
+        context.dataStore.edit { prefs ->
+            prefs[FIRST_GAME_KEY] = true
+        }
+    }
+
+    fun isFirstGame(context: Context): Flow<Boolean> {
+        return context.dataStore.data.map { prefs ->
+            // If key is missing, it IS the first game (return true).
+            // Once set to true (played), we return false.
+            // Wait, logic: key missing -> not played -> isFirstGame = true.
+            // setFirstGamePlayed -> stores true.
+            // So logic: if !prefs[KEY], then true.
+            // Simplify: Store "has_played_game".
+            // If has_played == false/null -> isFirstGame = true.
+            !(prefs[FIRST_GAME_KEY] ?: false)
         }
     }
 }

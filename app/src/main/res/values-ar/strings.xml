@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">شيكـا</string>
+    <string name="pass_and_play">مرّر و العب</string>
+    <string name="solo_vs_ai">ضد الجهاز</string>
+    <string name="leaderboard">🏆 المتصدرين</string>
+    <string name="how_to_play">📖 كيف ألعب؟</string>
+    <string name="settings">⚙️ الإعدادات</string>
+    <string name="player_1_name_label">اسم اللاعب 1</string>
+    <string name="player_2_name_label">اسم اللاعب 2</string>
+    <string name="player_1_default">اللاعب 1</string>
+    <string name="player_2_default">اللاعب 2</string>
+    <string name="start_game">▶️ ابدأ</string>
+    <string name="difficulty">المستوى</string>
+    <string name="easy">سهل</string>
+    <string name="hard">صعب</string>
+    <string name="master">محترف</string>
+    <string name="game_over">🏁 انتهت اللعبة</string>
+    <string name="back_to_home">🏠 القائمة الرئيسية</string>
+    <string name="wins">🏆 %1$s فاز!</string>
+    <string name="your_turn">👉 دورك</string>
+    <string name="ai_thinking">🤖 الجهاز يفكر...</string>
+    <string name="move">👣 تحرك</string>
+    <string name="place_wall">🧱 جدار</string>
+    <string name="theme">المظهر</string>
+    <string name="light_mode">فاتح</string>
+    <string name="dark_mode">داكن</string>
+    <string name="system_default">النظام</string>
+    <string name="language">اللغة</string>
+    <string name="english">English</string>
+    <string name="spanish">Español</string>
+    <string name="french">Français</string>
+    <string name="arabic">العربية</string>
+    <string name="data">البيانات</string>
+    <string name="reset_leaderboard">🗑️ حذف السجل</string>
+    
+    <string name="tut_goal_title">الهدف 🚩</string>
+    <string name="tut_goal_desc">عليك الوصول إلى الجهة المقابلة قبل خصمك.</string>
+    <string name="tut_turn_title">دورك 👉</string>
+    <string name="tut_turn_desc">في كل دور، يمكنك التحرك خطوة واحدة أو وضع جدار لعرقلة الخصم.</string>
+    <string name="tut_move_title">الحركة 👣</string>
+    <string name="tut_move_desc">اضغط على المربع المضاء للتحرك. يمكنك التحرك في جميع الاتجاهات.</string>
+    <string name="tut_walls_title">الجدران 🧱</string>
+    <string name="tut_walls_desc">استخدم الجدران بذكاء! لكن تذكر: لا يمكنك إغلاق الطريق تماماً.</string>
+    <string name="tut_win_title">الفوز 🏆</string>
+    <string name="tut_win_desc">فكر بذكاء. كلما قلت حركاتك، زاد تصنيفك!</string>
+    <string name="skip">تخطي</string>
+    <string name="next">التالي ⬅️</string>
+    <string name="start">ابدأ ▶️</string>
+</resources>

@@ -1,5 +1,8 @@
 package com.example.checka2.ui.components
 
+import androidx.compose.ui.res.stringResource
+import com.example.checka2.R
+
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,11 +29,11 @@ fun TutorialDialog(
     onDismiss: () -> Unit
 ) {
     val pages = listOf(
-        TutorialPage("Goal", "Reach the opposite edge first to win the game."),
-        TutorialPage("Your Turn", "Each turn, you can either MOVE your pawn or PLACE a wall."),
-        TutorialPage("Move", "Tap a glowing square to move 1 step. You can move up, down, left, or right."),
-        TutorialPage("Walls", "Place walls to block your opponent. But remember: everyone must always have a path to the goal!"),
-        TutorialPage("Win", "Be smart and strategic. Fewer turns usually means a higher rank!")
+        TutorialPage(stringResource(R.string.tut_goal_title), stringResource(R.string.tut_goal_desc)),
+        TutorialPage(stringResource(R.string.tut_turn_title), stringResource(R.string.tut_turn_desc)),
+        TutorialPage(stringResource(R.string.tut_move_title), stringResource(R.string.tut_move_desc)),
+        TutorialPage(stringResource(R.string.tut_walls_title), stringResource(R.string.tut_walls_desc)),
+        TutorialPage(stringResource(R.string.tut_win_title), stringResource(R.string.tut_win_desc))
     )
     
     val pagerState = rememberPagerState(pageCount = { pages.size })
@@ -119,7 +122,7 @@ fun TutorialDialog(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         TextButton(onClick = onDismiss) {
-                            Text("Skip")
+                            Text(stringResource(R.string.skip))
                         }
                         
                         Button(
@@ -131,7 +134,7 @@ fun TutorialDialog(
                                 }
                             }
                         ) {
-                            Text(if (pagerState.currentPage < pages.size - 1) "Next" else "Start")
+                            Text(if (pagerState.currentPage < pages.size - 1) stringResource(R.string.next) else stringResource(R.string.start))
                         }
                     }
                 }

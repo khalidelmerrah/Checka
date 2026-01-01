@@ -40,7 +40,6 @@ import com.example.checka2.domain.Wall
 import com.example.checka2.ui.theme.Sage
 import com.example.checka2.ui.theme.Stone800
 import com.example.checka2.ui.theme.Terracotta
-import com.example.checka2.ui.theme.ValidMove
 import com.example.checka2.ui.theme.WarmGray
 import com.example.checka2.ui.theme.WarmGrayLight
 import kotlin.math.round
@@ -84,16 +83,13 @@ fun CheckaBoard(
         }
 
         // 2. Walls Layer (Canvas)
-
-        val wallColor = Stone800.copy(alpha=0.8f) 
-        val previewColor = if (wallOrientation == Orientation.Horizontal) 
-             MaterialTheme.colorScheme.primary.copy(alpha = 0.6f) 
-        else MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+        val wallColor = Stone800 
+        val previewColor = Stone800.copy(alpha = 0.5f) // As requested "alpha-reduced versions"
         
         Canvas(modifier = Modifier.fillMaxSize()) {
             val cellW = size.width / 9f
             val cellH = size.height / 9f
-            val wallThickness = cellW * 0.2f
+            val wallThickness = 8.dp.toPx() // Fixed 8.dp
             
             fun drawGameWall(wall: Wall, color: Color) {
                 val cx = (wall.col + 1) * cellW
@@ -148,6 +144,8 @@ fun CheckaBoard(
     }
 }
 
+
+
 @Composable
 fun BoardCell(
     pos: Position,
@@ -198,24 +196,23 @@ fun PawnsOverlay(
     val p2Col by animateDpAsState(targetValue = cellSize * p2Pos.col, label = "p2ColAnimation")
 
     Box(modifier = Modifier.fillMaxSize()) {
+        val pawnSize = cellSize * 0.7f // 70% size
+        val offset = (cellSize - pawnSize) / 2 // Center it
+
         // P1 Pawn
         Pawn(
             player = Player.P1, 
             modifier = Modifier
-                .size(cellSize)
-                .padding(4.dp) // Gap
-                .align(Alignment.TopStart)
-                .offset(x = p1Col, y = p1Row)
+                .offset(x = p1Col + offset, y = p1Row + offset)
+                .size(pawnSize)
         )
         
         // P2 Pawn
         Pawn(
             player = Player.P2, 
             modifier = Modifier
-                .size(cellSize)
-                .padding(4.dp)
-                .align(Alignment.TopStart)
-                .offset(x = p2Col, y = p2Row)
+                .offset(x = p2Col + offset, y = p2Row + offset)
+                .size(pawnSize)
         )
     }
 }
@@ -224,10 +221,9 @@ fun PawnsOverlay(
 fun Pawn(player: Player, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .clip(CircleShape)
-            .background(if (player == Player.P1) Terracotta else Sage)
-            .border(2.dp, Color.White, CircleShape)
             .shadow(4.dp, CircleShape)
+            .background(if (player == Player.P1) Terracotta else Sage, CircleShape)
+            .border(4.dp, Color.White, CircleShape) // 4dp White Ring
     )
 }
 
@@ -238,32 +234,42 @@ fun InteractionOverlay(
 ) {
     if (!isPlaceWallMode) return
     
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-               detectTapGestures { offset ->
-                   val w = size.width
-                   val h = size.height
-                   val cellW = w / 9f
-                   val cellH = h / 9f
-                   
-                   val colFloat = (offset.x / cellW) - 1
-                   val rowFloat = (offset.y / cellH) - 1
-                   
-                   val col = round(colFloat).toInt()
-                   val row = round(rowFloat).toInt()
-                   
-                   if (col in 0..7 && row in 0..7) {
-                       val centerX = (col + 1) * cellW
-                       val centerY = (row + 1) * cellH
-                       val dist = (offset - Offset(centerX, centerY)).getDistance()
+    val touchRadius = 16.dp // 32dp diameter
+    
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize()
+    ) {
+         // Use density for pixel calculation
+         val density = androidx.compose.ui.platform.LocalDensity.current
+         
+         val cellW = maxWidth / 9f
+         val cellH = maxHeight / 9f
+         
+         Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                   detectTapGestures { offset ->
                        
-                       if (dist < cellW * 0.45f) {
-                           onIntersectionClick(row, col)
+                       val colFloat = (offset.x / cellW.toPx()) - 1
+                       val rowFloat = (offset.y / cellH.toPx()) - 1
+                       
+                       val col = round(colFloat).toInt()
+                       val row = round(rowFloat).toInt()
+                       
+                       if (col in 0..7 && row in 0..7) {
+                           val centerX = (col + 1) * cellW.toPx()
+                           val centerY = (row + 1) * cellH.toPx()
+                           val dist = (offset - Offset(centerX, centerY)).getDistance()
+                           
+                           val radiusPx = with(density) { touchRadius.toPx() }
+                           
+                           if (dist <= radiusPx) { // Strict 32dp target
+                               onIntersectionClick(row, col)
+                           }
                        }
                    }
-               }
-            }
-    )
+                }
+        )
+    }
 }

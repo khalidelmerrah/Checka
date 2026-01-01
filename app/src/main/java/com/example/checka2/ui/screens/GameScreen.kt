@@ -1,5 +1,8 @@
 package com.example.checka2.ui.screens
 
+import androidx.compose.ui.res.stringResource
+import com.example.checka2.R
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.checka2.domain.GameMode
@@ -42,7 +46,7 @@ fun GameScreen(
     val isPassAndPlay = (gameMode == GameMode.PassAndPlay)
     
     
-    // Board Rotation Logic removed per user request
+
 
     val showTutorial by viewModel.showTutorial.collectAsState()
     val validMoves by viewModel.validMoves.collectAsState()
@@ -83,26 +87,31 @@ fun GameScreen(
                     
                     PlayerPanel(
                         player = Player.P2,
-                        name = "Player 2", 
+                        name = stringResource(R.string.player_2_default), 
                         wallsLeft = state.p2WallsLeft,
                         isActive = state.currentPlayer == Player.P2
                     )
                 }
             }
 
-            // CENTER BOARD - Static (No Rotation)
-            CheckaBoard(
-                state = state,
-                isPlaceWallMode = isPlaceWallMode,
-                wallOrientation = wallOrientation,
-                previewWall = previewWall,
-                validMoves = validMoves, // Pass highlights
-                onCellClick = viewModel::onMoveSelected,
-                onIntersectionClick = viewModel::onIntersectionSelected,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .weight(2f)
-            )
+            // CENTER BOARD
+            Box(
+                 modifier = Modifier
+                     .weight(2f)
+                     .padding(16.dp),
+                 contentAlignment = Alignment.Center
+            ) {
+                CheckaBoard(
+                    state = state,
+                    isPlaceWallMode = isPlaceWallMode,
+                    wallOrientation = wallOrientation,
+                    previewWall = previewWall,
+                    validMoves = validMoves, 
+                    onCellClick = viewModel::onMoveSelected,
+                    onIntersectionClick = viewModel::onIntersectionSelected,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
             // BOTTOM AREA (P1)
             Box(
@@ -114,7 +123,7 @@ fun GameScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     PlayerPanel(
                         player = Player.P1,
-                        name = "Player 1",
+                        name = stringResource(R.string.player_1_default),
                         wallsLeft = state.p1WallsLeft,
                         isActive = state.currentPlayer == Player.P1
                     )
@@ -131,7 +140,7 @@ fun GameScreen(
                                 onToggleOrientation = viewModel::toggleOrientation
                             )
                         } else {
-                            Text("AI is thinking...", modifier = Modifier.padding(16.dp))
+                            Text(stringResource(R.string.ai_thinking), modifier = Modifier.padding(16.dp))
                         }
                     }
                 }
@@ -147,11 +156,11 @@ fun GameScreen(
         if (state.winner != null) {
             AlertDialog(
                 onDismissRequest = {}, 
-                title = { Text(text = "Game Over") },
-                text = { Text(text = "${if (state.winner == Player.P1) "Player 1" else "Player 2"} Wins!") },
+                title = { Text(text = stringResource(R.string.game_over)) },
+                text = { Text(text = stringResource(R.string.wins, if (state.winner == Player.P1) stringResource(R.string.player_1_default) else stringResource(R.string.player_2_default))) },
                 confirmButton = {
                     Button(onClick = onExit) {
-                        Text("Back to Home")
+                        Text(stringResource(R.string.back_to_home))
                     }
                 }
             )

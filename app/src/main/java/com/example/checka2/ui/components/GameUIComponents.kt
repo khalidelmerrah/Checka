@@ -1,8 +1,12 @@
 package com.example.checka2.ui.components
 
+import androidx.compose.ui.res.stringResource
+import com.example.checka2.R
+
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -77,7 +82,7 @@ fun PlayerPanel(
                 )
                 if (isActive) {
                     Text(
-                        text = "Your Turn",
+                        text = stringResource(R.string.your_turn),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -88,21 +93,26 @@ fun PlayerPanel(
         // Walls "Sticks" Badge
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-             // Trophy if winner? Handled by dialog usually.
-             // Just walls here.
+             val visibleSticks = minOf(wallsLeft, 5)
+             val overflow = if (wallsLeft > 5) wallsLeft - 5 else 0
              
-             // Max 10 walls. Draw generic sticks.
-             for (i in 0 until 10) {
+             for (i in 0 until visibleSticks) {
                  Box(
                      modifier = Modifier
                         .width(4.dp)
-                        .height(16.dp)
-                        .background(
-                            if (i < wallsLeft) color else MaterialTheme.colorScheme.surfaceVariant.copy(alpha=0.5f), 
-                            RoundedCornerShape(2.dp)
-                        )
+                        .height(20.dp)
+                        .background(color, RoundedCornerShape(2.dp))
+                 )
+             }
+             
+             if (overflow > 0) {
+                 Text(
+                     text = "+$overflow",
+                     style = MaterialTheme.typography.labelSmall,
+                     fontWeight = FontWeight.Bold,
+                     color = com.example.checka2.ui.theme.Stone800.copy(alpha=0.6f)
                  )
              }
         }
@@ -121,51 +131,93 @@ fun GameControls(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Using Stone800 -> WarmCharcoal from our theme for active states if needed, or stick to Material Theme mapping
-        val moveContainer = if (!isPlaceWallMode) com.example.checka2.ui.theme.Stone800 else MaterialTheme.colorScheme.surface
-        val moveContent = if (!isPlaceWallMode) com.example.checka2.ui.theme.WarmCream else com.example.checka2.ui.theme.Stone800
-        
-        val wallContainer = if (isPlaceWallMode) com.example.checka2.ui.theme.Stone800 else MaterialTheme.colorScheme.surface
-        val wallContent = if (isPlaceWallMode) com.example.checka2.ui.theme.WarmCream else com.example.checka2.ui.theme.Stone800
-
-        Button(
-            onClick = { if (isPlaceWallMode) onToggleMode() },
-            colors = ButtonDefaults.buttonColors(containerColor = moveContainer, contentColor = moveContent),
-            shape = RoundedCornerShape(12.dp)
+        // Smart Segmented Switch
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(56.dp)
+                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(28.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f), RoundedCornerShape(28.dp))
         ) {
-            Text("Move")
-        }
-        
-        Button(
-            onClick = { if (!isPlaceWallMode) onToggleMode() },
-            colors = ButtonDefaults.buttonColors(containerColor = wallContainer, contentColor = wallContent),
-            shape = RoundedCornerShape(12.dp),
-            enabled = wallsLeft > 0
-        ) {
-            Text("Place Wall")
-        }
-        
-        if (isPlaceWallMode) {
-             androidx.compose.animation.AnimatedContent(targetState = orientation, label = "rotation") { targetOrientation ->
-                 IconButton(onClick = onToggleOrientation) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Rotate Wall",
-                        modifier = Modifier.rotate(if (targetOrientation == Orientation.Vertical) 90f else 0f)
+            Row(modifier = Modifier.fillMaxSize()) {
+                // Move Segment
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize()
+                        .padding(4.dp)
+                        .background(
+                            if (!isPlaceWallMode) com.example.checka2.ui.theme.Stone800 else Color.Transparent,
+                            RoundedCornerShape(24.dp)
+                        ) // Animate this ideally, but simple state switch first
+                        .clip(RoundedCornerShape(24.dp))
+                        .clickable(onClick = { if (isPlaceWallMode) onToggleMode() }), // Switch to Move
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.move),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (!isPlaceWallMode) com.example.checka2.ui.theme.Cream else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+
+                // Wall Segment
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize()
+                        .padding(4.dp)
+                        .background(
+                            if (isPlaceWallMode) com.example.checka2.ui.theme.Stone800 else Color.Transparent,
+                            RoundedCornerShape(24.dp)
+                        )
+                        .clip(RoundedCornerShape(24.dp))
+                        .clickable(enabled = wallsLeft > 0, onClick = { if (!isPlaceWallMode) onToggleMode() }), // Switch to Wall
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.place_wall),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (isPlaceWallMode) com.example.checka2.ui.theme.Cream else if (wallsLeft > 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        // Rotation Button (Dynamic)
+        Box(modifier = Modifier.size(56.dp), contentAlignment = Alignment.Center) {
+             androidx.compose.animation.AnimatedVisibility(
+                 visible = isPlaceWallMode,
+                 enter = androidx.compose.animation.fadeIn() + androidx.compose.animation.scaleIn(),
+                 exit = androidx.compose.animation.fadeOut() + androidx.compose.animation.scaleOut()
+             ) {
+                 Button(
+                     onClick = onToggleOrientation,
+                     modifier = Modifier.size(56.dp),
+                     shape = CircleShape,
+                     colors = ButtonDefaults.buttonColors(
+                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                     ),
+                     contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+                 ) {
+                     Icon(
+                         imageVector = Icons.Default.Refresh,
+                         contentDescription = "Rotate",
+                         modifier = Modifier
+                             .size(24.dp)
+                             .rotate(if (orientation == Orientation.Vertical) 90f else 0f)
+                     )
+                 }
              }
-        } else {
-             // Show Trophy/Info or just spacer
-             Icon(
-                 imageVector = androidx.compose.material.icons.Icons.Filled.EmojiEvents,
-                 contentDescription = "Trophy",
-                 tint = com.example.checka2.ui.theme.Stone800
-             )
         }
     }
 }

@@ -19,26 +19,26 @@ private val DarkColorScheme = darkColorScheme(
     primary = Terracotta,
     secondary = Sage,
     tertiary = WarmGray,
-    background = WarmCharcoal,
-    surface = LighterCharcoal,
-    onPrimary = TextLight,
-    onSecondary = TextLight,
-    onTertiary = TextLight,
-    onBackground = TextLight,
-    onSurface = TextLight,
+    background = Stone800, // Dark mode background
+    surface = Stone800,    // Dark mode surface
+    onPrimary = Cream,
+    onSecondary = Stone800,
+    onTertiary = Stone800,
+    onBackground = Cream,
+    onSurface = Cream,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Terracotta,
     secondary = Sage,
     tertiary = WarmGray,
-    background = WarmCream,
-    surface = OffWhite,
-    onPrimary = TextLight,
-    onSecondary = TextDark,
-    onTertiary = TextDark,
-    onBackground = TextDark,
-    onSurface = TextDark,
+    background = Cream,
+    surface = Cream, 
+    onPrimary = Cream,
+    onSecondary = Stone800,
+    onTertiary = Stone800,
+    onBackground = Stone800,
+    onSurface = Stone800,
 )
 
 @Composable
