@@ -1,0 +1,32 @@
+
+> Task :app:signingReport
+Variant: debug
+Config: debug
+Store: C:\Users\khalid-pc\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 9F:3A:79:D2:84:02:D0:E4:27:F1:F6:CA:69:81:B1:36
+SHA1: 20:CF:83:56:67:0F:55:31:EF:4D:C2:FD:3C:34:D0:5C:42:B5:E9:8C
+SHA-256: 2C:F9:F0:76:9F:A2:16:4D:99:CF:8B:E2:A4:6D:34:F3:DE:9D:9F:95:26:30:F1:20:11:9A:58:17:21:C7:0D:5F
+Valid until: Monday, December 13, 2055
+----------
+Variant: release
+Config: release
+Store: C:\dev\Checka2\app\release-keystore.jks
+Alias: release_key
+MD5: 89:B5:73:BD:D3:3B:79:AE:EE:0C:DE:1A:AC:1A:D0:10
+SHA1: 6C:C8:26:3E:D8:12:B2:49:21:05:3A:63:D1:DB:65:C6:36:0B:AC:BE
+SHA-256: 77:44:B3:2B:CB:2B:61:B6:4F:D9:01:E7:BF:8E:05:1F:8A:80:2C:1B:73:8F:DD:20:75:4D:A5:FB:5C:17:71:61
+Valid until: Monday, May 19, 2053
+----------
+Variant: debugAndroidTest
+Config: debug
+Store: C:\Users\khalid-pc\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 9F:3A:79:D2:84:02:D0:E4:27:F1:F6:CA:69:81:B1:36
+SHA1: 20:CF:83:56:67:0F:55:31:EF:4D:C2:FD:3C:34:D0:5C:42:B5:E9:8C
+SHA-256: 2C:F9:F0:76:9F:A2:16:4D:99:CF:8B:E2:A4:6D:34:F3:DE:9D:9F:95:26:30:F1:20:11:9A:58:17:21:C7:0D:5F
+Valid until: Monday, December 13, 2055
+----------
+
+BUILD SUCCESSFUL in 1s
+1 actionable task: 1 executed

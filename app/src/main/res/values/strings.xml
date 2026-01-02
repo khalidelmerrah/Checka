@@ -2,9 +2,9 @@
     <string name="app_name">Checka</string>
     <string name="pass_and_play">Pass &amp; Play</string>
     <string name="solo_vs_ai">Solo vs AI</string>
-    <string name="leaderboard">🏆 Leaderboard</string>
-    <string name="how_to_play">📖 How to Play</string>
-    <string name="settings">⚙️ Settings</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="how_to_play">How to Play</string>
+    <string name="settings">Settings</string>
     <string name="player_1_name_label">Player 1 Name</string>
     <string name="player_2_name_label">Player 2 Name</string>
     <string name="player_1_default">Player 1</string>
@@ -46,4 +46,12 @@
     <string name="skip">Skip</string>
     <string name="next">Next ➡️</string>
     <string name="start">Start ▶️</string>
+    
+    <string name="exit_game_title">Exit Game?</string>
+    <string name="exit_game_confirmation">Are you sure you want to end this game in progress?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="searching_opponent">Searching for Opponent...</string>
+    <string name="game_services_project_id" translatable="false">460882543734</string>
+    <string name="default_web_client_id" translatable="false">460882543734-1krncmoh72rnchosf1j0dc50bru0eidd.apps.googleusercontent.com</string>
 </resources>

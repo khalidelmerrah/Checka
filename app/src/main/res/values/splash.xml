@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background, animated icon, and animation duration. -->
+        <item name="windowSplashScreenBackground">#292524</item>
+
+        <!-- Use the launcher icon as the splash screen icon. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_logo</item>
+        
+        <!-- Required for Android 12+ -->
+        <item name="postSplashScreenTheme">@style/Theme.Checka2</item>
+    </style>
+</resources>

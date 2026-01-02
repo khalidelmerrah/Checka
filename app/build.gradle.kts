@@ -8,26 +8,40 @@ plugins {
 }
 
 android {
-    namespace = "com.example.checka2"
+    namespace = "top.checka.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.checka2"
-        minSdk = 26 // Room/Compose often better with higher minSdk
+        applicationId = "top.checka.app"
+        minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = findProperty("RELEASE_KEY_ALIAS") as String? ?: "key0"
+            keyPassword = findProperty("RELEASE_KEY_PASSWORD") as String? ?: "android"
+            storeFile = file(findProperty("RELEASE_STORE_FILE") as String? ?: "keystore.jks")
+            storePassword = findProperty("RELEASE_STORE_PASSWORD") as String? ?: "android"
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            ndk {
+                debugSymbolLevel = "full"
+            }
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -74,9 +88,16 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("com.google.android.gms:play-services-games-v2:21.0.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation(libs.firebase.messaging)
+    
+    // Networking
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
