@@ -94,6 +94,12 @@ $latest_users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC LIMIT 
                     <li class="nav-item">
                         <a class="nav-link" href="leaderboard.php">Leaderboard</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin_logs.php">System Logs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../admin_bots.php">Bot Settings</a>
+                    </li>
                 </ul>
                 <div class="d-flex align-items-center">
                     <span class="navbar-text me-3 text-secondary">
@@ -164,10 +170,32 @@ $latest_users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC LIMIT 
         </div>
 
         <!-- Settings Placeholder -->
+        <!-- Quick Settings -->
         <div class="card">
             <div class="card-header">Quick Settings</div>
             <div class="card-body">
-                <p class="mb-0">Maintenance Mode: <span class="badge bg-secondary">Off</span> (To be implemented)</p>
+                <?php
+                // Fetch Bot Status
+                $botStatus = $pdo->query("SELECT setting_value FROM app_settings WHERE setting_key = 'bots_enabled'")->fetchColumn();
+                $isBotsOn = ($botStatus === 'true');
+                ?>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>
+                        Bot Matchmaking:
+                        <span class="badge bg-<?php echo $isBotsOn ? 'success' : 'danger'; ?>">
+                            <?php echo $isBotsOn ? 'ON' : 'OFF'; ?>
+                        </span>
+                    </span>
+                    <a href="../admin_bots.php"
+                        class="btn btn-sm btn-outline-<?php echo $isBotsOn ? 'danger' : 'success'; ?>">
+                        <?php echo $isBotsOn ? 'Disable Bots' : 'Enable Bots'; ?>
+                    </a>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>System Logs</span>
+                    <a href="../admin_logs.php" class="btn btn-sm btn-outline-info">View Logs</a>
+                </div>
             </div>
         </div>
     </div>

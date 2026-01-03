@@ -25,6 +25,9 @@ import top.checka.app.ui.components.PlayerPanel
 import top.checka.app.ui.components.TutorialDialog
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
 
 @Composable
 fun GameScreen(
@@ -152,7 +155,15 @@ fun GameScreen(
                 )
                 
                 if (isSearching) {
-                    Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.7f)), contentAlignment = Alignment.Center) {
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.7f))
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { }, // Consume clicks
+                        contentAlignment = Alignment.Center
+                    ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                              CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                              Spacer(modifier = Modifier.height(16.dp))

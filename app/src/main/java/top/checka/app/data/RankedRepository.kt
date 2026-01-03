@@ -10,19 +10,58 @@ import kotlinx.coroutines.withContext
 
 class RankedRepository {
 
-    suspend fun findMatch(userId: String, elo: Int): Result<FindMatchResponse> {
+    suspend fun findMatchWithFallback(userId: String, elo: Int): Result<FindMatchResponse> {
         return withContext(Dispatchers.IO) {
             try {
+                // Try API first
                 val response = ApiClient.service.findMatch(FindMatchRequest(userId, elo))
                 if (response.isSuccessful && response.body() != null) {
-                    Result.success(response.body()!!)
+                    val body = response.body()!!
+                    if (body.success) {
+                        Result.success(body)
+                    } else {
+                        // Backend returned explicit failure
+                         Result.success(createGhostBotResponse(elo, "No Match"))
+                    }
                 } else {
-                    Result.failure(Exception("Matchmaking failed: ${response.code()} ${response.message()}"))
+                     // Network/Server Error
+                    Result.success(createGhostBotResponse(elo, "HTTP ${response.code()}"))
                 }
             } catch (e: Exception) {
-                Result.failure(e)
+               // Exception (Offline etc)
+               android.util.Log.e("RankedRepo", "Matchmaking failed: ${e.message}", e)
+               Result.success(createGhostBotResponse(elo, e.javaClass.simpleName))
             }
         }
+    }
+
+    // Deprecated: Use findMatchWithFallback
+    suspend fun findMatch(userId: String, elo: Int): Result<FindMatchResponse> {
+        return findMatchWithFallback(userId, elo)
+    }
+
+    private fun createGhostBotResponse(playerElo: Int, errorMessage: String? = null): FindMatchResponse {
+        val randomId = (1000..9999).random()
+        // If error exists, show it in name for debugging
+        val botName = if (errorMessage != null) "Err: ${errorMessage.take(15)}" else "Player $randomId" 
+        
+        val botData = top.checka.app.data.api.OpponentData(
+            id = "bot_$randomId",
+            name = botName,
+            elo = playerElo + (-100..100).random(),
+            title = "Beginner", 
+            avatarUrl = null,
+            level = (1..10).random(),
+            winRate = "${(40..60).random()}%",
+            totalGames = (50..200).random()
+        )
+        
+        return FindMatchResponse(
+            success = true,
+            isBot = true,
+            opponent = botData,
+            message = "Ghost Bot Activated"
+        )
     }
 
     suspend fun reportMatch(

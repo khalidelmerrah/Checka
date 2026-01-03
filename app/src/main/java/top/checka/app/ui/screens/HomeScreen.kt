@@ -51,13 +51,11 @@ fun HomeScreen(
     userStats: top.checka.app.data.UserStats?, // New Param
     onSignIn: () -> Unit,
     onUpdateProfile: (String?, String?) -> Unit,
-    onStartGame: (GameMode, Difficulty, String, String) -> Unit,
-    onNavigateLeaderboard: () -> Unit,
-    onNavigateSettings: () -> Unit
+    onStartGame: (GameMode, Difficulty, String, String) -> Unit
 ) {
     var showPassPlayDialog by remember { mutableStateOf(false) }
     var showSoloDialog by remember { mutableStateOf(false) }
-    var showTutorialDialog by remember { mutableStateOf(false) }
+
     var visible by remember { mutableStateOf(false) }
     var isDrawerOpen by remember { mutableStateOf(false) }
 
@@ -175,39 +173,13 @@ fun HomeScreen(
                             }
                         )
 
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        HomeMenuCard(
-                            title = stringResource(R.string.leaderboard),
-                            icon = Icons.Default.EmojiEvents,
-                            iconTint = Color(0xFFFFA726),
-                            onClick = { onNavigateLeaderboard() }
-                        )
-
-                        HomeMenuCard(
-                            title = stringResource(R.string.how_to_play),
-                            icon = Icons.Default.MenuBook,
-                            iconTint = Color(0xFF26A69A),
-                            onClick = { showTutorialDialog = true }
-                        )
-
-                        HomeMenuCard(
-                            title = stringResource(R.string.settings),
-                            icon = Icons.Default.Settings,
-                            iconTint = Color(0xFFBDBDBD),
-                            onClick = { onNavigateSettings() }
-                        )
                     }
                 }
             }
         }
     )
 
-    if (showTutorialDialog) {
-        TutorialDialog(
-            onDismiss = { showTutorialDialog = false }
-        )
-    }
+
 
     if (showPassPlayDialog) {
         GameSetupDialog(

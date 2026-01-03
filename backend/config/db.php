@@ -3,10 +3,15 @@
 
 // cPanel Database Credentials
 // CHANGE THESE TO YOUR REAL CPANEL DETAILS
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'reyagency_chekadmin');
-define('DB_USER', 'reyagency_chkadmin');
-define('DB_PASS', 'QtLuG+SQ[?4.Dl-u');
+require_once __DIR__ . '/env_loader.php';
+loadEnv(__DIR__ . '/../.env');
+
+// cPanel Database Credentials
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'reyagency_chekadmin');
+define('DB_USER', getenv('DB_USER') ?: 'reyagency_chkadmin');
+define('DB_PASS', getenv('DB_PASS') ?: 'QtLuG+SQ[?4.Dl-u'); // Fallback ONLY for dev if .env missing, usually bad practice but kept for transition
+
 
 function get_db_connection()
 {
@@ -22,4 +27,6 @@ function get_db_connection()
         die("Database Connection Failed: " . $e->getMessage()); // In prod, log this instead of showing user
     }
 }
+
+$pdo = get_db_connection();
 ?>

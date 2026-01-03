@@ -57,15 +57,19 @@ $picture = $payload['picture'] ?? '';
 // 4. Update/Insert DB
 try {
     // Check if user exists
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE google_id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE google_subject_id = ?");
     $stmt->execute([$googleId]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
         // Create new user
         $userId = uniqid('u_');
-        $stmt = $pdo->prepare("INSERT INTO users (id, google_id, username, email, elo_rating, xp, level) VALUES (?, ?, ?, ?, 1200, 0, 1)");
+        $stmt = $pdo->prepare("INSERT INTO users (id, google_subject_id, display_name, email, elo_rating, xp, level) VALUES (?, ?, ?, ?, 1200, 0, 1)");
         $stmt->execute([$userId, $googleId, $name, $email]);
+
+        // LOGGING
+        $logEntry = "[" . date('Y-m-d H:i:s') . "] NEW USER REGISTERED: $name ($email) - ID: $userId\n";
+        file_put_contents(__DIR__ . '/../logs/app.log', $logEntry, FILE_APPEND);
 
         // Fetch again
         $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
@@ -78,7 +82,7 @@ try {
     echo json_encode([
         'success' => true,
         'user_id' => $user['id'],
-        'username' => $user['username'],
+        'username' => $user['display_name'],
         'elo' => (int) $user['elo_rating'],
         'xp' => (int) $user['xp'],
         'level' => (int) $user['level']

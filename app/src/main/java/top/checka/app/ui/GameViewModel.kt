@@ -135,7 +135,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun startRankedSearch() {
         if (currentUserId == null) {
-            _errorEvent.value = "Not logged in"
+            // LOGIN FAILED
+            _errorEvent.value = "⚠️ Login Failed. Please sign in to Google Play Games."
             _isSearching.value = false
             return
         }
@@ -146,77 +147,34 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         _p2Avatar.value = null
 
         viewModelScope.launch {
-            // 1. Get current stats for ELO
-            // We assume stored in UserPreferences (collected in init)
             val myElo = 1200 // Default or fetch real
-            // Ideally we'd have the stats exposed. For now, let's assume 1200 if not set.
             
-            // Loop for polling? Or one shot?
-            // Simple Logic: Try once, if fail/timeout, go to bot.
-            // Retries logic can be added later.
-            
-            try {
-                // Initial Delay to simulate "Searching" UI and prevent instant flicker
-                delay(2000) 
-                
-                val result = rankedRepository.findMatch(currentUserId!!, myElo)
-                
-                if (result.isSuccess) {
-                    val matchData = result.getOrNull()
-                    if (matchData != null && matchData.success) {
-                         // Match Found!
-                         _isSearching.value = false
-                         _p2Name.value = matchData.opponent?.name ?: "Unknown"
-                         _p2Avatar.value = matchData.opponent?.avatarUrl
-                         _opponentData.value = matchData.opponent
-                         
-                         // Start Game
-                         // P2 is opponent.
-                         // P1 is us.
-                         // Decide who starts? Currently we are P1.
-                    } else {
-                        // Backend returned success=false? Fallback to local bot?
-                        // "No match found"
-                         startGhostBot()
+            // Call Repository (which handles fallback to Ghost Bot if needed)
+            val result = rankedRepository.findMatchWithFallback(currentUserId!!, myElo)
+            val matchData = result.getOrNull()
+
+            if (result.isSuccess && matchData != null && matchData.success) {
+                    // Match Found (either human or ghost bot)
+                    _isSearching.value = false
+                    
+                    val opp = matchData.opponent
+                    _p2Name.value = opp?.name ?: "Unknown"
+                    _p2Avatar.value = opp?.avatarUrl
+                    _opponentData.value = opp
+                    
+                    // Set Bot Flag based on backend response
+                    isGhostBot = matchData.isBot
+                    
+                    if (isGhostBot && _gameState.value.currentPlayer == Player.P2) {
+                        triggerAITurn()
                     }
-                } else {
-                     // Network error
-                     startGhostBot()
-                }
-            } catch (e: Exception) {
-                // Error
-                startGhostBot()
+                    
+            } else {
+                    // This should theoretically not happen due to fallback, 
+                    // but if it does, show error.
+                    _isSearching.value = false
+                    _errorEvent.value = "Matchmaking failed unexpectedly."
             }
-        }
-    }
-    
-    private fun startGhostBot(failed: Boolean = false) {
-        _isSearching.value = false
-        isGhostBot = true
-        val randomId = (1000..9999).random()
-        val botName = "Player $randomId"
-        // Random Avatar fallback if needed, but let's use a default or null to show consistent "Bot-ness"
-        // Or pick a random Noto URL client side? No, simplest is null or hardcoded.
-        // Let's make it look like a real player with a random avatar if possible, or just null.
-        val botAvatar = null 
-        
-        _p2Name.value = botName
-        _p2Avatar.value = botAvatar
-        
-        // Create Fake Opponent Data so profile is clickable
-        _opponentData.value = top.checka.app.data.api.OpponentData(
-            id = "bot_$randomId",
-            name = botName,
-            elo = 1200 + (-100..100).random(),
-            title = "Beginner",
-            avatarUrl = botAvatar,
-            level = (1..10).random(),
-            winRate = "${(40..60).random()}%",
-            totalGames = (50..200).random()
-        )
-        
-        if (_gameState.value.currentPlayer == Player.P2) {
-            triggerAITurn()
         }
     }
 

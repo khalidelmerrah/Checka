@@ -23,6 +23,8 @@ import top.checka.app.ui.screens.SettingsScreen
 import top.checka.app.ui.theme.CheckaTheme
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.first
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.padding
 
 import top.checka.app.utils.AnalyticsHelper
 
@@ -73,98 +75,110 @@ class MainActivity : AppCompatActivity() {
             CheckaTheme(darkTheme = useDarkTheme) {
                 val navController = rememberNavController()
 
-                NavHost(navController = navController, startDestination = "home") {
-                    composable("home") {
-                        HomeScreen(
-                            isAuthenticated = isAuthenticated,
-                            currentPlayer = currentPlayer,
-                            userStats = userStats, // Passed here
-                            onSignIn = { 
-                                lifecycleScope.launch { authRepository.trySignIn(this@MainActivity) }
-                            },
-                            onUpdateProfile = { avatarUrl, displayName ->
-                                val stats = userStats
-                                if (stats?.userId != null) {
-                                    val repo = top.checka.app.data.RankedRepository()
-                                    lifecycleScope.launch {
-                                        val result = repo.updateProfile(stats.userId, avatarUrl, displayName)
-                                        
-                                        if (result) {
-                                            UserPreferences.saveUserStats(
-                                                context,
-                                                stats.userId,
-                                                displayName ?: stats.username ?: "Player", // Update name if provided, else keep old
-                                                stats.elo,
-                                                stats.xp,
-                                                stats.level,
-                                                avatarUrl ?: stats.avatarUrl // Update avatar if provided, else keep old
-                                            )
+                top.checka.app.ui.screens.MainScreen(navController = navController) { innerPadding ->
+                    NavHost(
+                        navController = navController, 
+                        startDestination = "home",
+                        modifier = androidx.compose.ui.Modifier
+                            .padding(innerPadding)
+                            .consumeWindowInsets(innerPadding)
+                    ) {
+                        composable("home") {
+                            HomeScreen(
+                                isAuthenticated = isAuthenticated,
+                                currentPlayer = currentPlayer,
+                                userStats = userStats,
+                                onSignIn = { 
+                                    lifecycleScope.launch { authRepository.trySignIn(this@MainActivity) }
+                                },
+                                onUpdateProfile = { avatarUrl, displayName ->
+                                    val stats = userStats
+                                    if (stats?.userId != null) {
+                                        val repo = top.checka.app.data.RankedRepository()
+                                        lifecycleScope.launch {
+                                            val result = repo.updateProfile(stats.userId, avatarUrl, displayName)
+                                            
+                                            if (result) {
+                                                UserPreferences.saveUserStats(
+                                                    context,
+                                                    stats.userId,
+                                                    displayName ?: stats.username ?: "Player", 
+                                                    stats.elo,
+                                                    stats.xp,
+                                                    stats.level,
+                                                    avatarUrl ?: stats.avatarUrl
+                                                )
+                                            }
                                         }
                                     }
-                                }
-                            },
-                            onStartGame = { mode, diff, p1, p2 ->
-                                val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)
-                                scope.launch {
-                                    val isFirst = UserPreferences.isFirstGame(context).first()
-                                    if (isFirst) {
-                                        analyticsHelper.logFirstGame()
-                                        UserPreferences.setFirstGamePlayed(context)
+                                },
+                                onStartGame = { mode, diff, p1, p2 ->
+                                    val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)
+                                    scope.launch {
+                                        val isFirst = UserPreferences.isFirstGame(context).first()
+                                        if (isFirst) {
+                                            analyticsHelper.logFirstGame()
+                                            UserPreferences.setFirstGamePlayed(context)
+                                        }
+                                        analyticsHelper.logGameStart(mode.name, diff.name)
                                     }
-                                    analyticsHelper.logGameStart(mode.name, diff.name)
+                                    
+                                    val route = "game/${mode.name}/${diff.name}/$p1/$p2"
+                                    navController.navigate(route)
                                 }
-                                
-                                val route = "game/${mode.name}/${diff.name}/$p1/$p2"
-                                navController.navigate(route)
-                            },
-                            onNavigateLeaderboard = { navController.navigate("leaderboard") },
-                            onNavigateSettings = { navController.navigate("settings") }
-                        )
-                    }
-
-                    composable(
-                        route = "game/{mode}/{diff}/{p1}/{p2}",
-                        arguments = listOf(
-                            navArgument("mode") { type = NavType.StringType },
-                            navArgument("diff") { type = NavType.StringType },
-                            navArgument("p1") { type = NavType.StringType },
-                            navArgument("p2") { type = NavType.StringType }
-                        )
-                    ) { backStackEntry ->
-                        val modeStr = backStackEntry.arguments?.getString("mode") ?: "PassAndPlay"
-                        val diffStr = backStackEntry.arguments?.getString("diff") ?: "Easy"
-                        val p1 = backStackEntry.arguments?.getString("p1") ?: "P1"
-                        val p2 = backStackEntry.arguments?.getString("p2") ?: "P2"
-                        
-                        val mode = try { GameMode.valueOf(modeStr) } catch (e: Exception) { GameMode.PassAndPlay }
-                        val diff = try { Difficulty.valueOf(diffStr) } catch (e: Exception) { Difficulty.Easy }
-
-                        val viewModel: top.checka.app.ui.GameViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
-                        
-                        androidx.compose.runtime.LaunchedEffect(Unit) {
-                            viewModel.startGame(mode, diff, p1, p2)
+                            )
                         }
 
-                        GameScreen(
-                            viewModel = viewModel,
-                            gameMode = mode,
-                            onExit = { navController.popBackStack() }
-                        )
-                    }
+                        composable(
+                            route = "game/{mode}/{diff}/{p1}/{p2}",
+                            arguments = listOf(
+                                navArgument("mode") { type = NavType.StringType },
+                                navArgument("diff") { type = NavType.StringType },
+                                navArgument("p1") { type = NavType.StringType },
+                                navArgument("p2") { type = NavType.StringType }
+                            )
+                        ) { backStackEntry ->
+                            val modeStr = backStackEntry.arguments?.getString("mode") ?: "PassAndPlay"
+                            val diffStr = backStackEntry.arguments?.getString("diff") ?: "Easy"
+                            val p1 = backStackEntry.arguments?.getString("p1") ?: "P1"
+                            val p2 = backStackEntry.arguments?.getString("p2") ?: "P2"
+                            
+                            val mode = try { GameMode.valueOf(modeStr) } catch (e: Exception) { GameMode.PassAndPlay }
+                            val diff = try { Difficulty.valueOf(diffStr) } catch (e: Exception) { Difficulty.Easy }
 
-                    composable("leaderboard") {
-                        LeaderboardScreen(
-                            userStats = userStats,
-                            onBack = { navController.popBackStack() }
-                        )
-                    }
+                            val viewModel: top.checka.app.ui.GameViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+                            
+                            androidx.compose.runtime.LaunchedEffect(Unit) {
+                                viewModel.startGame(mode, diff, p1, p2)
+                            }
 
-                    composable("settings") {
-                        SettingsScreen(
-                            onBack = { navController.popBackStack() },
-                            onThemeChanged = { theme -> analyticsHelper.logThemeChanged(theme) },
-                            onLanguageChanged = { lang -> analyticsHelper.setUserLanguage(lang) }
-                        )
+                            GameScreen(
+                                viewModel = viewModel,
+                                gameMode = mode,
+                                onExit = { navController.popBackStack() }
+                            )
+                        }
+
+                        composable("leaderboard") {
+                            LeaderboardScreen(
+                                userStats = userStats,
+                                onBack = { navController.popBackStack() } // Back button still useful inside screen or via system back
+                            )
+                        }
+                        
+                         composable("tutorial") {
+                            top.checka.app.ui.components.TutorialScreen(
+                                onDismiss = { navController.navigate("home") } 
+                            )
+                        }
+
+                        composable("settings") {
+                            SettingsScreen(
+                                onBack = { navController.popBackStack() },
+                                onThemeChanged = { theme -> analyticsHelper.logThemeChanged(theme) },
+                                onLanguageChanged = { lang -> analyticsHelper.setUserLanguage(lang) }
+                            )
+                        }
                     }
                 }
             }
