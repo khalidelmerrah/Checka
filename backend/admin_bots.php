@@ -1,5 +1,7 @@
 <?php
-require_once __DIR__ . '/../config/db.php';
+session_start();
+require_once 'config/env.php';
+require_once 'config/db.php';
 
 $mode = $_GET['mode'] ?? 'status'; // 'on', 'off', 'status'
 

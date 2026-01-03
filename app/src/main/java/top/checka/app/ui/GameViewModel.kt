@@ -149,8 +149,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val myElo = 1200 // Default or fetch real
             
-            // Call Repository (which handles fallback to Ghost Bot if needed)
-            val result = rankedRepository.findMatchWithFallback(currentUserId!!, myElo)
+            // Call Repository (authentication via Bearer token)
+            val result = rankedRepository.findMatchWithFallback(myElo)
             val matchData = result.getOrNull()
 
             if (result.isSuccess && matchData != null && matchData.success) {
@@ -319,12 +319,11 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 )
                 
-                // Report to Backend
+                // Report to Backend (authenticated via session token)
                 if (currentUserId != null) {
                     val winnerId = if (state.winner == Player.P1) currentUserId else null
                     
                     authRepository.reportMatch(
-                        player1Id = currentUserId!!,
                         player2Id = null,
                         winnerId = winnerId,
                         gameMode = gameMode.name,

@@ -10,11 +10,11 @@ import kotlinx.coroutines.withContext
 
 class RankedRepository {
 
-    suspend fun findMatchWithFallback(userId: String, elo: Int): Result<FindMatchResponse> {
+    suspend fun findMatchWithFallback(elo: Int): Result<FindMatchResponse> {
         return withContext(Dispatchers.IO) {
             try {
-                // Try API first
-                val response = ApiClient.service.findMatch(FindMatchRequest(userId, elo))
+                // Try API first (authentication via Bearer token)
+                val response = ApiClient.service.findMatch(FindMatchRequest(elo))
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
                     if (body.success) {
@@ -36,8 +36,8 @@ class RankedRepository {
     }
 
     // Deprecated: Use findMatchWithFallback
-    suspend fun findMatch(userId: String, elo: Int): Result<FindMatchResponse> {
-        return findMatchWithFallback(userId, elo)
+    suspend fun findMatch(elo: Int): Result<FindMatchResponse> {
+        return findMatchWithFallback(elo)
     }
 
     private fun createGhostBotResponse(playerElo: Int, errorMessage: String? = null): FindMatchResponse {
@@ -65,7 +65,6 @@ class RankedRepository {
     }
 
     suspend fun reportMatch(
-        player1Id: String,
         player2Id: String?,
         winnerId: String, 
         gameMode: String,
@@ -76,7 +75,6 @@ class RankedRepository {
         return withContext(Dispatchers.IO) {
             try {
                 val req = ReportMatchRequest(
-                    player1Id = player1Id,
                     player2Id = player2Id,
                     winnerId = winnerId,
                     gameMode = gameMode,
@@ -110,10 +108,10 @@ class RankedRepository {
             }
         }
     }
-    suspend fun updateProfile(userId: String, avatarUrl: String?, displayName: String?): Boolean {
+    suspend fun updateProfile(avatarUrl: String?, displayName: String?): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                val req = top.checka.app.data.api.UpdateProfileRequest(userId, avatarUrl, displayName)
+                val req = top.checka.app.data.api.UpdateProfileRequest(avatarUrl, displayName)
                 val response = ApiClient.service.updateProfile(req)
                 response.isSuccessful && response.body()?.success == true
             } catch (e: Exception) {

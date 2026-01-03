@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once '../config/env.php';
 require_once '../config/db.php';
 require_once '../api/elo.php'; // Include Elo logic for Rank Titles
 

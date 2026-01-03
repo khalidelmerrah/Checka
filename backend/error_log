@@ -1,0 +1,20 @@
+[03-Jan-2026 02:34:40 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/../config/db.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/admin_bots.php on line 2
+[03-Jan-2026 02:34:40 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/../config/db.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/admin_bots.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/reyagency/admin.checka.top/admin_bots.php on line 2
+[03-Jan-2026 02:34:41 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/../config/db.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/admin_bots.php on line 2
+[03-Jan-2026 02:34:41 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/../config/db.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/admin_bots.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/reyagency/admin.checka.top/admin_bots.php on line 2
+[03-Jan-2026 02:34:41 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/../config/db.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/admin_bots.php on line 2
+[03-Jan-2026 02:34:41 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/../config/db.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/admin_bots.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/reyagency/admin.checka.top/admin_bots.php on line 2
+[03-Jan-2026 02:34:55 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/../config/db.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/admin_bots.php on line 2
+[03-Jan-2026 02:34:55 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/../config/db.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/admin_bots.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/reyagency/admin.checka.top/admin_bots.php on line 2

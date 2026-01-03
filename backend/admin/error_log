@@ -1,0 +1,90 @@
+[03-Jan-2026 10:36:08 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:08 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/config/db.php(7): require_once()
+#1 /home/reyagency/admin.checka.top/admin/index.php(3): require_once('/home/reyagency...')
+#2 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:11 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:11 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/config/db.php(7): require_once()
+#1 /home/reyagency/admin.checka.top/admin/index.php(3): require_once('/home/reyagency...')
+#2 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:14 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:14 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/config/db.php(7): require_once()
+#1 /home/reyagency/admin.checka.top/admin/index.php(3): require_once('/home/reyagency...')
+#2 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:18 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:18 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/config/db.php(7): require_once()
+#1 /home/reyagency/admin.checka.top/admin/index.php(3): require_once('/home/reyagency...')
+#2 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:20 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:20 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/config/db.php(7): require_once()
+#1 /home/reyagency/admin.checka.top/admin/index.php(3): require_once('/home/reyagency...')
+#2 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:20 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:36:20 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/config/db.php(7): require_once()
+#1 /home/reyagency/admin.checka.top/admin/index.php(3): require_once('/home/reyagency...')
+#2 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:52:08 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:52:08 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:52:17 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:52:17 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:54:24 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:54:24 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:54:26 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:54:26 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Warning:  require_once(/home/reyagency/admin.checka.top/config/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/reyagency/admin.checka.top/config/env.php on line 7
+[03-Jan-2026 10:55:21 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/reyagency/admin.checka.top/config/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/reyagency/admin.checka.top/config/env.php:7
+Stack trace:
+#0 /home/reyagency/admin.checka.top/admin/index.php(3): require_once()
+#1 {main}
+  thrown in /home/reyagency/admin.checka.top/config/env.php on line 7

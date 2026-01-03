@@ -49,23 +49,26 @@ data class LeaderboardEntry(
 )
 
 data class AuthRequest(
-    val code: String
+    @SerializedName("id_token") val idToken: String
 )
 
 data class AuthResponse(
     val success: Boolean,
+    @SerializedName("session_token") val sessionToken: String?,
     @SerializedName("user_id") val userId: String?,
     val username: String?,
     @SerializedName("avatar_url") val avatarUrl: String? = null,
     val elo: Int?,
     val xp: Int?,
     val level: Int?,
-    val message: String? = null
+    @SerializedName("total_wins") val totalWins: Int? = 0,
+    @SerializedName("total_matches") val totalMatches: Int? = 0,
+    val message: String? = null,
+    val banned: Boolean? = false
 )
 
 
 data class FindMatchRequest(
-    @SerializedName("user_id") val userId: String,
     @SerializedName("elo") val elo: Int
 )
 
@@ -88,7 +91,6 @@ data class OpponentData(
 )
 
 data class ReportMatchRequest(
-    @SerializedName("player1_id") val player1Id: String,
     @SerializedName("player2_id") val player2Id: String?,
     @SerializedName("winner_id") val winnerId: String?,
     @SerializedName("game_mode") val gameMode: String,
@@ -117,7 +119,6 @@ data class PlayerResult(
 )
 
 data class UpdateProfileRequest(
-    @SerializedName("user_id") val userId: String,
     @SerializedName("avatar_url") val avatarUrl: String? = null,
     @SerializedName("display_name") val displayName: String? = null
 )

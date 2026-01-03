@@ -1,17 +1,20 @@
 <?php
-require_once 'db.php';
+require_once '../config/db.php';
+require_once '../middleware/auth.php';
 
 header('Content-Type: application/json');
+
+// AUTHENTICATE USER
+$p1_id = AuthMiddleware::authenticate();
 
 // Get raw POST data
 $data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($data['player1_id']) || !isset($data['game_mode'])) {
+if (!isset($data['game_mode'])) {
     echo json_encode(['success' => false, 'message' => 'Missing required fields']);
     exit;
 }
 
-$p1_id = $data['player1_id'];
 $p2_id = isset($data['player2_id']) ? $data['player2_id'] : null;
 $winner_id = isset($data['winner_id']) && $data['winner_id'] !== "" ? $data['winner_id'] : null;
 $game_mode = $data['game_mode'];
@@ -20,6 +23,11 @@ $duration = isset($data['duration']) ? $data['duration'] : 0;
 $turns = isset($data['turns']) ? $data['turns'] : 0;
 
 try {
+    $pdo = get_db_connection();
+
+    // BEGIN TRANSACTION - Atomic updates to prevent race conditions
+    $pdo->beginTransaction();
+
     // 1. Record the Match
     $stmt = $pdo->prepare("INSERT INTO matches (game_mode, difficulty, player1_id, player2_id, winner_id, duration_seconds) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->execute([$game_mode, $difficulty, $p1_id, $p2_id, $winner_id, $duration]);
@@ -66,9 +74,17 @@ try {
     $stmt = $pdo->prepare("UPDATE users SET level = FLOOR(xp / 1000) + 1 WHERE id IN (?, ?)");
     $stmt->execute([$p1_id, $p2_id]);
 
+    // COMMIT TRANSACTION - All updates successful
+    $pdo->commit();
+
     echo json_encode(['success' => true, 'match_id' => $match_id]);
 
 } catch (PDOException $e) {
+    // ROLLBACK on any error
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    error_log("Match reporting error: " . $e->getMessage());
 }
 ?>

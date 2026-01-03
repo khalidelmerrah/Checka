@@ -1,20 +1,17 @@
 <?php
 require_once '../config/db.php';
+require_once '../middleware/auth.php';
 require_once 'elo.php';
 
 header('Content-Type: application/json');
 
-// NOTE: In production, verify AUTH TOKEN here.
-// Parse JSON body
-$data = json_decode(file_get_contents('php://input'), true);
-$userId = $data['user_id'] ?? $_REQUEST['user_id'] ?? null;
-$userElo = $data['elo'] ?? $_REQUEST['elo'] ?? 1200;
+// AUTHENTICATE USER - No longer trust client-provided user_id
+$userId = AuthMiddleware::authenticate();
 
-if (!$userId) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing user_id']);
-    exit;
-}
+// Parse JSON body for optional parameters (not identity!)
+$data = json_decode(file_get_contents('php://input'), true);
+$userElo = $data['elo'] ?? 1200; // Client can suggest, but we'll verify from DB
+
 
 try {
     // 1. Clean old queue (Remove players waiting > 30s)

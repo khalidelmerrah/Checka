@@ -24,23 +24,40 @@ class AuthRepository(private val context: Context) {
                 _isAuthenticated.value = true
                 fetchPlayerProfile(activity)
                 
-                // Request Server Side Access (Auth Code) for Backend
+                // Get ID Token from Google Play Games
                 try {
-                    val serverAuthCode = PlayGames.getGamesSignInClient(activity)
+                    val idToken = PlayGames.getGamesSignInClient(activity)
                         .requestServerSideAccess(
                             context.getString(top.checka.app.R.string.default_web_client_id), 
                             /* forceRefreshToken = */ false
                         ).await()
-                    Log.d("AuthRepository", "Server Auth Code: $serverAuthCode")
                     
-                    // Exchange Code for User Data at Backend
-                    if (serverAuthCode != null) {
+                    Log.d("AuthRepository", "Got Google ID Token")
+                    
+                    // Authenticate with backend using ID token
+                    if (idToken != null) {
                         try {
                             val authResponse = top.checka.app.data.api.ApiClient.service.authenticate(
-                                top.checka.app.data.api.AuthRequest(serverAuthCode)
+                                top.checka.app.data.api.AuthRequest(idToken)
                             )
                             val body = authResponse.body()
+                            
                             if (authResponse.isSuccessful && body != null && body.success) {
+                                // Check if account is banned
+                                if (body.banned == true) {
+                                    Log.w("AuthRepository", "Account is banned")
+                                    _isAuthenticated.value = false
+                                    // Could emit a specific banned state here
+                                    return
+                                }
+                                
+                                // Store session token in ApiClient
+                                body.sessionToken?.let {
+                                    top.checka.app.data.api.ApiClient.sessionToken = it
+                                    Log.d("AuthRepository", "Session token stored")
+                                }
+                                
+                                // Save user data locally
                                 UserPreferences.saveUserStats(
                                     context, 
                                     userId = body.userId ?: "", 
@@ -53,13 +70,19 @@ class AuthRepository(private val context: Context) {
                                 Log.d("AuthRepository", "Backend Auth Success: ${body.userId}")
                             } else {
                                 Log.e("AuthRepository", "Backend Auth Failed: ${body?.message} Code: ${authResponse.code()}")
+                                _isAuthenticated.value = false
                             }
                         } catch (apiEx: Exception) {
                              Log.e("AuthRepository", "Backend API Error", apiEx)
+                             _isAuthenticated.value = false
                         }
+                    } else {
+                        Log.e("AuthRepository", "Failed to get ID token from Google")
+                        _isAuthenticated.value = false
                     }
                 } catch (e: Exception) {
-                    Log.e("AuthRepository", "Failed to retrieve server auth code", e)
+                    Log.e("AuthRepository", "Failed to retrieve ID token", e)
+                    _isAuthenticated.value = false
                 }
 
             } else {
@@ -93,7 +116,6 @@ class AuthRepository(private val context: Context) {
         }
     }
     suspend fun reportMatch(
-        player1Id: String,
         player2Id: String?,
         winnerId: String?,
         gameMode: String,
@@ -103,7 +125,6 @@ class AuthRepository(private val context: Context) {
     ) {
         try {
             val request = top.checka.app.data.api.ReportMatchRequest(
-                player1Id = player1Id,
                 player2Id = player2Id,
                 winnerId = winnerId,
                 gameMode = gameMode,
